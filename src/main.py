@@ -1,38 +1,20 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
+from forms import LoginForm
 
 app = Flask(__name__)
 
-navitems = {
-        "Home": "/home",
-        "Explore": "/explore",
-        "Profile": "/profile",
-        "New Post": "/newpost",
-        }
-
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    return render_template("login.html")
+    form = LoginForm()
+    if form.validate_on_submit():
+        ...
+        return redirect(url_for("/home"))
+    else:
+        return render_template("login.html", form=form)
 
-@app.route("/")
 @app.route("/home")
 def home():
-    return render_template("home.html", navitems=navitems)
-
-@app.route("/explore")
-def explore():
-    return render_template("explore.html", navitems=navitems)
-
-@app.route("/profile")
-def profile():
-    return render_template("profile.html", navitems=navitems)
-
-@app.route("/newpost")
-def newpost():
-    return render_template("newpost.html", navitems=navitems)
-
-@app.route("/post")
-def post():
-    return render_template("post.html", navitems=navitems)
+    return render_template("home.html")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
