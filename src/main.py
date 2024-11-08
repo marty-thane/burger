@@ -3,18 +3,33 @@ from forms import LoginForm
 
 app = Flask(__name__)
 
+def get_heading():
+    pass
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
         ...
-        return redirect(url_for("/home"))
+        return redirect(url_for("home"))
     else:
         return render_template("login.html", form=form)
 
 @app.route("/home")
 def home():
-    return render_template("home.html")
+    return render_template("home.html", heading=get_heading())
+
+@app.route("/people")
+def people():
+    return render_template("people.html", heading=get_heading())
+
+@app.route("/post")
+def post():
+    return render_template("post.html", heading=get_heading())
+
+@app.route("/user")
+def user():
+    return render_template("user.html", heading=get_heading())
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
