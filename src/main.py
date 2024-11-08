@@ -1,10 +1,11 @@
 from flask import Flask, render_template, redirect
 from forms import LoginForm
+import inspect
 
 app = Flask(__name__)
 
 def get_heading():
-    pass
+    return inspect.currentframe().f_code.co_name
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
