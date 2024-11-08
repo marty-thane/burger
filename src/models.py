@@ -2,7 +2,7 @@ from neomodel import StructuredNode, UniqueIdProperty, StringProperty, DateTimeP
 from datetime import datetime
 
 class User(StructuredNode):
-    id = UniqueIdProperty()
+    uid = UniqueIdProperty()
     username = StringProperty(unique_index=True, required=True, max_length=20)
     password = StringProperty(required=True, max_length=64) # hash with sha256
     posts = RelationshipTo("Post", "POSTS")
@@ -11,12 +11,12 @@ class User(StructuredNode):
     likes = RelationshipTo("Post", "LIKES")
 
 class Post(StructuredNode):
-    id = UniqueIdProperty()
+    uid = UniqueIdProperty()
     time = DateTimeProperty(default=datetime.now)
     content = StringProperty(required=True)
 
 class Comment(StructuredNode):
-    id = UniqueIdProperty()
+    uid = UniqueIdProperty()
     time = DateTimeProperty(default=datetime.now)
     content = StringProperty(required=True)
     commented_on = RelationshipTo("Post", "COMMENTED_ON")
