@@ -1,5 +1,9 @@
 from flask import Flask, render_template, redirect
+from neomodel import config
 from forms import LoginForm
+from models import User, Post, Comment
+
+config.DATABASE_URL = "bolt://neo4j:password@neo4j:7687"
 
 app = Flask(__name__)
 
