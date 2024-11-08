@@ -2,11 +2,19 @@ from flask import Flask, render_template, redirect
 from neomodel import config
 from forms import LoginForm
 from models import User, Post, Comment
+from dotenv import load_dotenv
+import os
+import base64
 import inspect
 
-config.DATABASE_URL = "bolt://neo4j:password@neo4j:7687"
-
 app = Flask(__name__)
+
+load_dotenv()
+encoded_key = os.getenv("FLASK_SECRET_KEY")
+secret_key = base64.urlsafe_b64decode(encoded_key)
+app.config["SECRET_KEY"] = secret_key
+
+config.DATABASE_URL = "bolt://neo4j:password@neo4j:7687"
 
 def get_heading():
     return inspect.currentframe().f_code.co_name
