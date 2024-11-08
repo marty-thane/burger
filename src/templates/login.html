@@ -1,5 +1,16 @@
 {% extends "template.html" %}
 
 {% block main %}
+<form action="{{ url_for('login') }}" method="post">
+    <fieldset>
+        {{ form.csrf_token}}
+        {{ form.username }}
+        {{ form.password }}
+        {{ form.create_account}}
+        {{ form.submit }}
+
+    </fieldset>
+    
+</form>
 
 {% endblock %}
