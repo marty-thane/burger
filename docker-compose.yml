@@ -19,7 +19,7 @@ services:
     volumes:
       - neo4j_data:/data
     environment:
-      - NEO4J_AUTH=neo4j/neo4j
+      - NEO4J_AUTH=neo4j/password
 
   # redis:
   #   image: redislabs/redismod
