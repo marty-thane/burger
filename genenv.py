@@ -1,6 +1,6 @@
 import secrets
 
-VARS = ["FLASK_SECRET_KEY", "NEO4J_PASSWORD"]
+VARIABLES = ["FLASK_SECRET_KEY", "NEO4J_PASSWORD"]
 TOKEN_LENGTH=24
 OUTPUT_FILE=".env"
 
@@ -9,7 +9,7 @@ def generate_token(length: int) -> str:
 
 def main():
     with open(OUTPUT_FILE, "w") as file:
-        for var in VARS:
+        for var in VARIABLES:
             token = generate_token(TOKEN_LENGTH)
             file.write(f"{var}={token}\n")
 
