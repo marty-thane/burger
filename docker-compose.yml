@@ -6,6 +6,9 @@ services:
       - 5000:5000
     volumes:
       - ./src:/usr/src/burger
+    environment:
+      - FLASK_SECRET_KEY=${FLASK_SECRET_KEY}
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD}
     depends_on:
       - neo4j
     #   - redis
@@ -19,7 +22,7 @@ services:
     volumes:
       - neo4j_data:/data
     environment:
-      - NEO4J_AUTH=neo4j/password
+      - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD}
 
   # redis:
   #   image: redislabs/redismod
