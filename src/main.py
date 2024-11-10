@@ -1,6 +1,6 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, url_for
 from neomodel import config
-from forms import LoginForm
+from forms import LoginForm, PostForm, CommentForm
 from models import User, Post, Comment
 from dotenv import load_dotenv
 import os
@@ -28,9 +28,13 @@ def login():
     else:
         return render_template("login.html", form=form)
 
-@app.route("/home")
+@app.route("/home", methods=["GET", "POST"])
 def home():
-    return render_template("home.html", heading=get_heading())
+    form = PostForm()
+    if form.validate_on_submit():
+        ...
+        return redirect(url_for("home"))
+    return render_template("home.html", form=form, heading=get_heading())
 
 @app.route("/people")
 def people():
