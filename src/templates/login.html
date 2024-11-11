@@ -1,6 +1,9 @@
 {% extends "template.html" %}
 
 {% block main %}
+{% for message in get_flashed_messages() %}
+	{{ message }}
+{% endfor  %}
 <form action="{{ url_for('login') }}" method="post">
     <fieldset>
         {{ form.csrf_token}}
@@ -8,9 +11,6 @@
         {{ form.password }}
         {{ form.create_account}}
         {{ form.submit }}
-
     </fieldset>
-    
 </form>
-
 {% endblock %}
