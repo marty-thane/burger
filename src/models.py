@@ -5,10 +5,10 @@ class User(StructuredNode):
     uid = UniqueIdProperty()
     username = StringProperty(unique_index=True, required=True, max_length=20)
     password = StringProperty(required=True, max_length=64) # hash with sha256
-    posts = RelationshipTo("Post", "POSTS")
-    comments = RelationshipTo("Comment", "COMMENTS")
-    follows = RelationshipTo("User", "FOLLOWS")
-    likes = RelationshipTo("Post", "LIKES")
+    posted = RelationshipTo("Post", "POSTED")
+    commented = RelationshipTo("Comment", "COMMENTED")
+    followed = RelationshipTo("User", "FOLLOWED")
+    liked = RelationshipTo("Post", "LIKED")
 
 class Post(StructuredNode):
     uid = UniqueIdProperty()
