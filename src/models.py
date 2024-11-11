@@ -1,22 +1,25 @@
-from neomodel import StructuredNode, UniqueIdProperty, StringProperty, DateTimeProperty, RelationshipTo
+from neomodel import StructuredNode, StringProperty, UniqueIdProperty, DateTimeProperty, RelationshipTo, RelationshipFrom
 from datetime import datetime
 
 class User(StructuredNode):
     uid = UniqueIdProperty()
     username = StringProperty(unique_index=True, required=True, max_length=20)
     password = StringProperty(required=True, max_length=64) # hash with sha256
-    posted = RelationshipTo("Post", "POSTED")
-    commented = RelationshipTo("Comment", "COMMENTED")
-    followed = RelationshipTo("User", "FOLLOWED")
-    liked = RelationshipTo("Post", "LIKED")
+    posts = RelationshipTo("Post", "POSTED")
+    comments = RelationshipTo("Comment", "COMMENTED")
+    follows = RelationshipTo("User", "FOLLOWED")
+    likes = RelationshipTo("Post", "LIKED")
 
 class Post(StructuredNode):
     uid = UniqueIdProperty()
     time = DateTimeProperty(default=datetime.now)
     content = StringProperty(required=True)
+    user = RelationshipFrom("User", "POSTED")
+    comments = RelationshipTo("Comment", "HAS")
 
 class Comment(StructuredNode):
     uid = UniqueIdProperty()
     time = DateTimeProperty(default=datetime.now)
     content = StringProperty(required=True)
-    commented_on = RelationshipTo("Post", "COMMENTED_ON")
+    user = RelationshipFrom("User", "COMMENTED")
+    post = RelationshipFrom("Post", "HAS")
