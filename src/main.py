@@ -11,7 +11,7 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY")
 config.DATABASE_URL = f"bolt://neo4j:{os.getenv('NEO4J_PASSWORD')}@neo4j:7687"
 
 def get_heading():
-    return inspect.currentframe().f_code.co_name
+    return inspect.stack()[1].function
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
