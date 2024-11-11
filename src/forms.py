@@ -9,9 +9,9 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Login")
 
 class PostForm(FlaskForm):
-    content = TextAreaField("Content", validators=[DataRequired(), Length(max=256)])
+    content = TextAreaField("Content", validators=[DataRequired(), Length(max=280)])
     submit = SubmitField("Post")
 
 class CommentForm(FlaskForm):
-    content = TextAreaField("Content", validators=[DataRequired(), Length(max=256)])
+    content = TextAreaField("Content", validators=[DataRequired(), Length(max=280)])
     submit = SubmitField("Post")
