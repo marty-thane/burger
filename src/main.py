@@ -6,6 +6,8 @@ from models import User, Post, Comment
 from helpers import get_heading
 import os
 
+MAX_FEED_LENGTH = 30
+
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
@@ -60,7 +62,7 @@ def home():
         return redirect(url_for("home"))
 
     # Get (user, post) tuples to display in feed
-    posts = Post.nodes.order_by("-time").all()
+    posts = Post.nodes.order_by("-time").limit(MAX_FEED_LENGTH).all()
     users_posts = [(post.user.single(), post) for post in posts]
 
     return render_template("home.html",form=form, heading=get_heading(), users_posts=users_posts)
