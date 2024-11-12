@@ -3,7 +3,7 @@ from neomodel import db
 import inspect
 
 # Return name of calling function
-def get_heading() -> str:
+def get_heading():
     return inspect.stack()[1].function
 
 # Convert cypher query results into a list of dicts

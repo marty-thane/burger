@@ -21,7 +21,7 @@ def load_user(user_uid):
 
 @app.route("/login", methods=["GET", "POST"])
 @app.route("/", methods=["GET", "POST"])
-def login() -> None:
+def login():
     # Logic for registering/logging in
     form = LoginForm()
     if form.validate_on_submit():
@@ -50,7 +50,7 @@ def login() -> None:
 
 @app.route("/home", methods=["GET", "POST"])
 @login_required
-def home() -> None:
+def home():
     # Logic for submitting new posts
     form = PostForm()
     if form.validate_on_submit():
@@ -67,12 +67,12 @@ def home() -> None:
 
 @app.route("/people")
 @login_required
-def people() -> None:
+def people():
     ...
 
 @app.route("/post", methods=["GET", "POST"])
 @login_required
-def post() -> None:
+def post():
     # Fetch requested post (404 if not found)
     post_uid = request.args.get("uid")
     post = Post.nodes.get_or_none(uid=post_uid)
@@ -96,7 +96,7 @@ def post() -> None:
 
 @app.route("/user")
 @login_required
-def user() -> None:
+def user():
     # Fetch requested post (404 if not found)
     user_uid = request.args.get("uid")
     user = User.nodes.get_or_none(uid=user_uid)
@@ -109,7 +109,7 @@ def user() -> None:
     return render_template("user.html", heading=get_heading(), user=user, posts=posts)
 
 @app.route("/logout")
-def logout() -> None:
+def logout():
     logout_user()
     return redirect(url_for("login"))
 
