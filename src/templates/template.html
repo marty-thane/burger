@@ -5,10 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ heading | capitalize }}</title>
 </head>
-<body>  
-    <nav>    
-        <!--dodelat-->
+<body>
+
+    {% if request.path != '/login' %}
+    <nav>
+        <ul>
+            {% for key, value in nav.items() %}
+                <li><a href="{{ value }}">{{ key }}</a></li>
+            {% endfor %}
+        </ul>
     </nav>
+    {% endif %}
+
     <header>
         {{ heading | capitalize }}
     </header>
