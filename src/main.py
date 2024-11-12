@@ -13,6 +13,7 @@ config.DATABASE_URL = f"bolt://neo4j:{os.getenv('NEO4J_PASSWORD')}@neo4j:7687"
 @app.route("/login", methods=["GET", "POST"])
 @app.route("/", methods=["GET", "POST"])
 def login() -> None:
+    # Logic for registering/logging in
     form = LoginForm()
     if form.validate_on_submit():
         username = form.username.data
@@ -40,6 +41,7 @@ def login() -> None:
 
 @app.route("/home", methods=["GET", "POST"])
 def home() -> None:
+    # Logic for submitting new posts
     form = PostForm()
     if form.validate_on_submit():
         content = form.content.data
@@ -48,21 +50,25 @@ def home() -> None:
         user.posts.connect(post)
         return redirect(url_for("home"))
 
-    users_posts = [(post.user.single(), post) for post in Post.nodes.order_by("-time").all()]
+    # Get (user, post) tuples to display in feed
+    posts = Post.nodes.order_by("-time").all()
+    users_posts = [(post.user.single(), post) for post in posts]
 
     return render_template("home.html", form=form, heading=get_heading(), users_posts=users_posts)
 
 @app.route("/people")
 def people() -> None:
-    return render_template("people.html", heading=get_heading())
+    ...
 
 @app.route("/post", methods=["GET", "POST"])
 def post() -> None:
+    # Fetch requested post (404 if not found)
     post_uid = request.args.get("uid")
     post = Post.nodes.get_or_none(uid=post_uid)
     if not post:
         return render_template("404.html", heading="Page not found")
-
+    
+    # Logic for submitting comments
     form = CommentForm()
     if form.validate_on_submit():
         content = form.content.data
@@ -72,17 +78,21 @@ def post() -> None:
         comment.post.connect(post)
         return redirect(url_for("post", uid=post_uid))
 
-    users_comments = [(comment.user.single(), comment) for comment in post.comments.order_by("-time").all()]
+    # Get (user, comment) tuples of comments on post
+    comments = post.comments.order_by("-time").all()
+    users_comments = [(comment.user.single(), comment) for comment in comments]
 
     return render_template("post.html", form=form, heading=get_heading(), post=post, users_comments=users_comments)
 
 @app.route("/user")
 def user() -> None:
+    # Fetch requested post (404 if not found)
     user_uid = request.args.get("uid")
     user = User.nodes.get_or_none(uid=user_uid)
     if not post:
         return render_template("404.html", heading="Page not found")
 
+    # Get list of posts published by user
     posts = user.posts.order_by("-time").all()
 
     return render_template("user.html", heading=get_heading(), user=user, posts=posts)
