@@ -29,16 +29,16 @@ def login():
         password = form.password.data
         create_account = form.create_account.data
         if create_account:
-            user = User.nodes.get_or_none(username=username)
+            user = User.nodes.get_or_none(username=username) # Check if user exists
             if not user:
-                user = User(username=username, password=password).save()
+                user = User(username=username, password=password).save() # Create new account
                 login_user(user)
                 return redirect(url_for("home"))
             else:
                 flash("This username is already taken.")
                 return redirect(url_for("login"))
         else:
-            user = User.nodes.get_or_none(username=username, password=password)
+            user = User.nodes.get_or_none(username=username, password=password) # Check if credentials match
             if user:
                 login_user(user)
                 return redirect(url_for("home"))
@@ -56,14 +56,14 @@ def home():
     if form.validate_on_submit():
         content = form.content.data
         post = Post(content=content).save()
-        current_user.posts.connect(post)
+        post.user.connect(current_user)
         return redirect(url_for("home"))
 
     # Get (user, post) tuples to display in feed
     posts = Post.nodes.order_by("-time").all()
     users_posts = [(post.user.single(), post) for post in posts]
 
-    return render_template("home.html", form=form, heading=get_heading(), users_posts=users_posts)
+    return render_template("home.html",form=form, heading=get_heading(), users_posts=users_posts)
 
 @app.route("/people")
 @login_required
@@ -88,11 +88,14 @@ def post():
         comment.post.connect(post)
         return redirect(url_for("post", uid=post_uid))
 
+    # Get author of current post
+    user = post.user.single()
+
     # Get (user, comment) tuples of comments on post
     comments = post.comments.order_by("-time").all()
     users_comments = [(comment.user.single(), comment) for comment in comments]
 
-    return render_template("post.html", form=form, heading=get_heading(), post=post, users_comments=users_comments)
+    return render_template("post.html", form=form, heading=get_heading(), user=user, post=post, users_comments=users_comments)
 
 @app.route("/user")
 @login_required
