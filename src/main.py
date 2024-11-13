@@ -63,8 +63,10 @@ def home():
         return redirect(url_for("home"))
 
     # Get (user, post) tuples to display in feed
-    #* Change this once follow logic is implemented (followed users+your own posts)
-    posts = Post.nodes.order_by("-time").all()[:MAX_FEED_LENGTH]
+    posts = current_user.posts.all()
+    for user in current_user.follows.all():
+        posts.extend(user.posts.all())
+    posts = sorted(posts, key=lambda post: post.time, reverse=True)[:MAX_FEED_LENGTH] # Sort and limit
     users_posts = [(post.user.single(), post) for post in posts]
 
     return render_template("home.html", form=form,
