@@ -48,7 +48,8 @@ def login():
                 flash("Wrong username or password.")
                 return redirect(url_for("login"))
 
-    return render_template("login.html", form=form)
+    return render_template("login.html", form=form,
+                           heading=get_heading())
 
 @app.route("/home", methods=["GET", "POST"])
 @login_required
@@ -62,15 +63,24 @@ def home():
         return redirect(url_for("home"))
 
     # Get (user, post) tuples to display in feed
+    #* Change this once follow logic is implemented (followed users+your own posts)
     posts = Post.nodes.order_by("-time").limit(MAX_FEED_LENGTH).all()
     users_posts = [(post.user.single(), post) for post in posts]
 
-    return render_template("home.html",form=form, heading=get_heading(), users_posts=users_posts)
+    return render_template("home.html", form=form,
+                           users_posts=users_posts,
+                           heading=get_heading())
 
 @app.route("/people")
 @login_required
 def people():
-    ...
+    followed_users = current_user.follows.order_by("username").all()
+    recommended_users = None
+    return render_template("people.html",
+                           followed_users=followed_users,
+                           recommended_users=recommended_users,
+                           heading=get_heading())
+    #* Change this one follow logic is implemented (recommended accounts)
 
 @app.route("/post", methods=["GET", "POST"])
 @login_required
@@ -91,13 +101,16 @@ def post():
         return redirect(url_for("post", uid=post_uid))
 
     # Get author of current post
-    user = post.user.single()
+    author = post.user.single()
 
     # Get (user, comment) tuples of comments on post
     comments = post.comments.order_by("-time").all()
     users_comments = [(comment.user.single(), comment) for comment in comments]
 
-    return render_template("post.html", form=form, heading=get_heading(), user=user, post=post, users_comments=users_comments)
+    return render_template("post.html", form=form,
+                           author=author, post=post,
+                           users_comments=users_comments,
+                           heading=get_heading())
 
 @app.route("/user")
 @login_required
@@ -111,9 +124,19 @@ def user():
     # Get list of posts published by user
     posts = user.posts.order_by("-time").all()
 
-    return render_template("user.html", heading=get_heading(), user=user, posts=posts)
+    return render_template("user.html",
+                           user=user, posts=posts,
+                           heading=get_heading())
+
+#* Here, a separate endpoint handling follows/likes will accept POST requests with data about what to do
+@app.route("/follow")
+@login_required
+def follow():
+    ...
+#* Make up your mind wether to use wtforms or not
 
 @app.route("/logout")
+@login_required
 def logout():
     logout_user()
     return redirect(url_for("login"))
