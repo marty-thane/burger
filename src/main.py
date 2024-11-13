@@ -18,8 +18,8 @@ login_manager.login_view = "login"
 config.DATABASE_URL = f"bolt://neo4j:{os.getenv('NEO4J_PASSWORD')}@neo4j:7687"
 
 @login_manager.user_loader
-def load_user(user_uid):
-    return User.nodes.get_or_none(uid=user_uid)
+def load_user(uid):
+    return User.nodes.get_or_none(uid=uid)
 
 @app.route("/login", methods=["GET", "POST"])
 @app.route("/", methods=["GET", "POST"])
@@ -59,12 +59,12 @@ def home():
     if form.validate_on_submit():
         content = form.content.data
         post = Post(content=content).save()
-        post.user.connect(current_user)
+        current_user.posts.connect(post)
         return redirect(url_for("home"))
 
     # Get (user, post) tuples to display in feed
     #* Change this once follow logic is implemented (followed users+your own posts)
-    posts = Post.nodes.order_by("-time").limit(MAX_FEED_LENGTH).all()
+    posts = Post.nodes.order_by("-time").all()[:MAX_FEED_LENGTH]
     users_posts = [(post.user.single(), post) for post in posts]
 
     return render_template("home.html", form=form,
@@ -75,30 +75,28 @@ def home():
 @login_required
 def people():
     followed_users = current_user.follows.order_by("username").all()
-    recommended_users = None
+    recommended_users = current_user.follows.follows.order_by("username").all() #* foaf logic, sort based on number of mutual contacts
     return render_template("people.html",
                            followed_users=followed_users,
                            recommended_users=recommended_users,
                            heading=get_heading())
-    #* Change this one follow logic is implemented (recommended accounts)
 
-@app.route("/post", methods=["GET", "POST"])
+@app.route("/post/<string:uid>", methods=["GET", "POST"])
 @login_required
-def post():
+def post(uid):
     # Fetch requested post (404 if not found)
-    post_uid = request.args.get("uid")
-    post = Post.nodes.get_or_none(uid=post_uid)
+    post = Post.nodes.get_or_none(uid=uid)
     if not post:
-        return render_template("404.html", heading="Page not found")
+        return render_template("404.html")
     
     # Logic for submitting comments
     form = CommentForm()
     if form.validate_on_submit():
         content = form.content.data
         comment = Comment(content=content).save()
-        comment.user.connect(current_user)
+        current_user.comments.connect(comment)
         comment.post.connect(post)
-        return redirect(url_for("post", uid=post_uid))
+        return redirect(url_for("post", uid=uid))
 
     # Get author of current post
     author = post.user.single()
@@ -112,14 +110,15 @@ def post():
                            users_comments=users_comments,
                            heading=get_heading())
 
-@app.route("/user")
+@app.route("/user/<string:uid>")
 @login_required
-def user():
-    # Fetch requested post (404 if not found)
-    user_uid = request.args.get("uid")
-    user = User.nodes.get_or_none(uid=user_uid)
-    if not post:
-        return render_template("404.html", heading="Page not found")
+def user(uid):
+    # Fetch requested user (404 if not found)
+    user = User.nodes.get_or_none(uid=uid)
+    if not user:
+        return render_template("404.html")
+
+    #* Logic to follow/unfollow
 
     # Get list of posts published by user
     posts = user.posts.order_by("-time").all()
@@ -127,13 +126,6 @@ def user():
     return render_template("user.html",
                            user=user, posts=posts,
                            heading=get_heading())
-
-#* Here, a separate endpoint handling follows/likes will accept POST requests with data about what to do
-@app.route("/follow")
-@login_required
-def follow():
-    ...
-#* Make up your mind wether to use wtforms or not
 
 @app.route("/logout")
 @login_required
