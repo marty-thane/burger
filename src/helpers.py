@@ -1,5 +1,3 @@
-from flask import redirect, url_for, session
-from neomodel import db
 import inspect
 
 # Return name of calling function
