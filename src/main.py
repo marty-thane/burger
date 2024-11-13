@@ -63,6 +63,7 @@ def home():
         return redirect(url_for("home"))
 
     # Get (user, post) tuples to display in feed
+    #* This will get slow for bigger numbers of posts, fix it
     posts = current_user.posts.all()
     for user in current_user.follows.all():
         posts.extend(user.posts.all())
