@@ -1,12 +1,14 @@
 from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from neomodel import config
-from forms import LoginForm, PostForm, CommentForm
+from forms import LoginForm, PostForm, CommentForm, FollowForm, PeopleForm
 from models import User, Post, Comment
 from helpers import get_heading
+import random
 import os
 
 MAX_FEED_LENGTH = 30
+MAX_RECOMMENDED_LENGTH = 5
 
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
@@ -19,7 +21,7 @@ config.DATABASE_URL = f"bolt://neo4j:{os.getenv('NEO4J_PASSWORD')}@neo4j:7687"
 
 @login_manager.user_loader
 def load_user(uid):
-    return User.nodes.get_or_none(uid=uid)
+    return User.nodes.get(uid=uid)
 
 @app.route("/login", methods=["GET", "POST"])
 @app.route("/", methods=["GET", "POST"])
@@ -48,8 +50,7 @@ def login():
                 flash("Wrong username or password.")
                 return redirect(url_for("login"))
 
-    return render_template("login.html", form=form,
-                           heading=get_heading())
+    return render_template("login.html", form=form, heading=get_heading())
 
 @app.route("/home", methods=["GET", "POST"])
 @login_required
@@ -63,26 +64,36 @@ def home():
         return redirect(url_for("home"))
 
     # Get (user, post) tuples to display in feed
-    #* This will get slow for bigger numbers of posts, fix it
+    #* This will get slow for bigger numbers of posts, fix it with cypher
     posts = current_user.posts.all()
     for user in current_user.follows.all():
         posts.extend(user.posts.all())
     posts = sorted(posts, key=lambda post: post.time, reverse=True)[:MAX_FEED_LENGTH] # Sort and limit
     users_posts = [(post.user.single(), post) for post in posts]
 
-    return render_template("home.html", form=form,
-                           users_posts=users_posts,
-                           heading=get_heading())
+    return render_template("home.html", form=form, users_posts=users_posts, heading=get_heading())
 
-@app.route("/people")
+@app.route("/people", methods=["GET", "POST"])
 @login_required
 def people():
     followed_users = current_user.follows.order_by("username").all()
-    recommended_users = current_user.follows.follows.order_by("username").all() #* foaf logic, sort based on number of mutual contacts
-    return render_template("people.html",
-                           followed_users=followed_users,
-                           recommended_users=recommended_users,
-                           heading=get_heading())
+    recommended_users = []
+    for user in followed_users: #* maybe use cypher as well (may be faster)
+        recommended_users.expand(user.follows.all())
+    if recommended_users:
+        recommended_users = random.shuffle(recommended_users)[:MAX_RECOMMENDED_LENGTH]
+
+    form = PeopleForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        user = User.nodes.get_or_none(username=username)
+        if user:
+            return redirect(url_for("user", uid=user.uid))
+        else:
+            flash("This user does not exist.")
+            return redirect(url_for("people"))
+
+    return render_template("people.html", form=form, followed_users=followed_users, recommended_users=recommended_users, heading=get_heading())
 
 @app.route("/post/<string:uid>", methods=["GET", "POST"])
 @login_required
@@ -108,12 +119,9 @@ def post(uid):
     comments = post.comments.order_by("-time").all()
     users_comments = [(comment.user.single(), comment) for comment in comments]
 
-    return render_template("post.html", form=form,
-                           author=author, post=post,
-                           users_comments=users_comments,
-                           heading=get_heading())
+    return render_template("post.html", form=form, author=author, post=post, users_comments=users_comments, heading=get_heading())
 
-@app.route("/user/<string:uid>")
+@app.route("/user/<string:uid>", methods=["GET", "POST"])
 @login_required
 def user(uid):
     # Fetch requested user (404 if not found)
@@ -121,14 +129,24 @@ def user(uid):
     if not user:
         return render_template("404.html")
 
-    #* Logic to follow/unfollow
+    u = current_user.follows.get_or_none(uid=user.uid)
+    if u:
+        is_followed = True
+    else:
+        is_followed = False
+
+    form = FollowForm()
+    if form.validate_on_submit():
+        if u:
+            current_user.follows.disconnect(user)
+        else:
+            current_user.follows.connect(user)
+        is_followed = not is_followed
 
     # Get list of posts published by user
     posts = user.posts.order_by("-time").all()
 
-    return render_template("user.html",
-                           user=user, posts=posts,
-                           heading=get_heading())
+    return render_template("user.html", form=form, user=user, is_followed=is_followed, posts=posts, heading=get_heading())
 
 @app.route("/logout")
 @login_required

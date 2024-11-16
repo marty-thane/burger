@@ -15,3 +15,11 @@ class PostForm(FlaskForm):
 class CommentForm(FlaskForm):
     content = TextAreaField("Content", validators=[DataRequired(), Length(max=280)])
     submit = SubmitField("Comment")
+
+class FollowForm(FlaskForm):
+    follow_submit = SubmitField("Follow")
+    unfollow_submit = SubmitField("Unfollow")
+
+class PeopleForm(FlaskForm):
+    username = StringField("Username", validators=[DataRequired(),Length(max=20)])
+    submit = SubmitField("Search")
