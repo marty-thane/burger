@@ -79,7 +79,7 @@ def people():
     followed_users = current_user.follows.order_by("username").all()
     recommended_users = []
     for user in followed_users: #* maybe use cypher as well (may be faster)
-        recommended_users.expand(user.follows.all())
+        recommended_users.extend(user.follows.all())
     if recommended_users:
         recommended_users = random.shuffle(recommended_users)[:MAX_RECOMMENDED_LENGTH]
 
