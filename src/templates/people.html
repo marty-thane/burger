@@ -2,4 +2,14 @@
 
 {% block main %}
 
+<form action="{{ url_for('people') }}" method="post"> 
+    <fieldset>
+        {{ form.csrf_token}}
+        {{ form.username }}
+        {{ form.submit }}
+    </fieldset>
+</form>
+
+
+
 {% endblock %}

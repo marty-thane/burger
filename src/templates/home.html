@@ -9,4 +9,14 @@
     </fieldset>
 </form>
 
+
+
+{% for user, post in users_posts %}
+<strong>{{ user.username }}</strong>            
+<p>{{ post.content }}</p>
+
+{% endfor %}
+
+
+
 {% endblock %}
