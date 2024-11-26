@@ -2,4 +2,20 @@
 
 {% block main %}
 
+<p>{{ author.username }}</p>
+<p>{{ post.content }}</p>
+
+<form action="{{ url_for('post', uid=post.uid) }}" method="post"> 
+    <fieldset>
+        {{ form.csrf_token}}
+        {{ form.content }}
+        {{ form.submit }}
+    </fieldset>
+</form>
+
+{% for user, comment in users_comments %}
+    <p> {{ user.username}}</p>
+    <p> {{comment.content}} </p>
+{% endfor %}
+
 {% endblock %}

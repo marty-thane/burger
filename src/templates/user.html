@@ -2,4 +2,22 @@
 
 {% block main %}
 
+{% if user.uid != current_user.uid %}
+<form action="{{ url_for('user', uid=user.uid) }}" method="post"> 
+    <fieldset>
+        {{ form.csrf_token}}
+        {% if is_followed %}
+            {{ form.unfollow_submit }}
+        {% else %}
+            {{ form.follow_submit }}
+        {% endif %}
+    </fieldset>
+</form>
+{% endif %}
+
+{{ user.username }} <br>
+{{ user.uid }}
+{% for post in posts %}
+    <p>{{ post.content }}</p>
+{% endfor %}
 {% endblock %}

@@ -2,14 +2,6 @@
 
 {% block main %}
 
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
-    {% endif %}        
-{% endwith %}
-
 <form action="{{ url_for('login') }}" method="post">
     <fieldset>
         {{ form.csrf_token}}
@@ -20,6 +12,12 @@
     </fieldset>
 </form>
 
-
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}        
+{% endwith %}
 
 {% endblock %}
