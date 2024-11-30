@@ -82,6 +82,7 @@ def people():
         recommended_users.extend(user.follows.all())
     if recommended_users:
         recommended_users = random.shuffle(recommended_users)[:MAX_RECOMMENDED_LENGTH]
+        
 
     form = PeopleForm()
     if form.validate_on_submit():

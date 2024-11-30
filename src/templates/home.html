@@ -12,9 +12,9 @@
 
 
 {% for user, post in users_posts %}
-<strong>{{ user.username }}</strong>
+<p><a href="{{ url_for('user', uid=user.uid) }}">{{ user.username }}</a></p>
 <p>{{ post.content }}</p>        
-<p><a href="{{ url_for('post', uid=post.uid) }}">More info</a></p>
+<p><a href="{{ url_for('post', uid=post.uid) }}">Show more</a></p>
 
 {% endfor %}
 

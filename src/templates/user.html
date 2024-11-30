@@ -1,4 +1,4 @@
-{% extends "template_focus.html" %}
+{% extends "template.html" %}
 
 {% block main %}
 
@@ -15,8 +15,8 @@
 </form>
 {% endif %}
 
-{{ user.username }} <br>
-{{ user.uid }}
+<p>{{ user.username }}</p>
+
 {% for post in posts %}
     <p>{{ post.content }}</p>
 {% endfor %}
