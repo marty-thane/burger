@@ -1,0 +1,16 @@
+.navbar {
+    width: 300px;
+    font-size: large;
+}
+
+.custom_color {
+    background-color: #3c3f45; 
+}
+
+a {
+    color: #ffffff;
+}
+
+aside {
+    width: 400px;
+}
