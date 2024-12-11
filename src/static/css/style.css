@@ -18,7 +18,7 @@ a:hover {
     text-decoration: underline;
 }
 
-aside {
+.layout {
     flex: 0 1 400px;
     max-width: 400px;
 }
@@ -54,6 +54,7 @@ aside {
 
 .container-custom {
     flex: 0 1 600px;
+    min-width: 400px;
     max-width: 600px;
 }
 
@@ -62,7 +63,7 @@ aside {
 }
 
 @media (max-width: 960px) {
-    aside {
+    .layout {
         flex: 0 1 250px;
         max-width: 250px;
     }
@@ -70,10 +71,13 @@ aside {
         flex: 0 1 200px;
         max-width: 200px;
     }
+    .container-custom {
+        min-width: 200px;
+    }
 }
 
 @media (max-width: 540px) {
-    aside {
+    .layout {
         display: none;
     }
     nav {
