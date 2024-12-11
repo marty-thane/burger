@@ -53,13 +53,27 @@ a:hover {
 }
 
 .container-custom {
-    flex: 0 1 600px;
-    min-width: 400px;
-    max-width: 600px;
+    flex: 0 1;
+    width: 600px;
 }
 
 .mini-profile {
     height: 1em;
+}
+
+@media (max-width: 1200px) {
+    .layout {
+        flex: 0 1 325px;
+        max-width: 325px;
+    }
+    nav {
+        flex: 0 1 250px;
+        max-width: 250px;
+    }
+    .container-custom {
+        width: 100%;
+        min-width: 400px;
+    }
 }
 
 @media (max-width: 960px) {
