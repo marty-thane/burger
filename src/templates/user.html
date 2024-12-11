@@ -4,7 +4,7 @@
 
 <div class="d-flex flex-column align-items-center">
     <section class="text-center">
-        <img class="profile_img mt-3" src="{{ url_for('static', filename='images/image1.jpg') }}" alt="image"> 
+        <img class="profile_img mt-3" src="{{ url_for('static', filename='pictures/'+user.picture) }}" alt="image"> 
         <h3 class="mt-2">{{ user.username }}</h3>
         {% if user.uid != current_user.uid %}
             <form action="{{ url_for('user', uid=user.uid) }}" method="post" class=" mt-3"> 
