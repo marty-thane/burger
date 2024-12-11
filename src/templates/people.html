@@ -2,22 +2,43 @@
 
 {% block main %}
 
-<form action="{{ url_for('people') }}" method="post"> 
-    <fieldset>
-        {{ form.csrf_token}}
-        {{ form.username }}
-        {{ form.submit }}
-    </fieldset>
-</form>
+<section class="d-flex justify-content-center mb-5">
+    <form action="{{ url_for('people') }}" method="post"> 
+        <fieldset>
+            {{ form.csrf_token}}
+            <div class="d-flex align-items-center">
+            {{ form.username(class="form-control", placeholder="Enter username") }}
+            {{ form.submit(class="btn btn-primary") }}
+            </div>
+            {% with messages = get_flashed_messages() %}
+                {% for message in messages %}
+                    <p class="text-danger">{{ message }}</p>
+                {% endfor %}       
+            {% endwith %}
+        </fieldset>
+    </form>
+</section>
 
-{% with messages = get_flashed_messages() %}
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}       
-{% endwith %}
-
-{% for user in followed_users %}
-<p>{{ user.username }}</p>            
-{% endfor %}
-
+<section class="d-flex justify-content-center mt-5">
+    <artiCle class="users-container ps-3">
+        <h4>Followed users</h4>
+        {% if follows %}   
+        {% for user in follows %}
+            <p><img class="mini-profile pe-2" src="{{ url_for('static', filename = 'images/image1.jpg') }}"><a href="{{ url_for('user', uid=user.uid) }}">{{ user.username }}</a></p>                    
+        {% endfor %}
+        {% else %}
+            <p>No followed users.</p>
+        {% endif %}
+    </artiCle>
+    <article class="users-container ps-5 pe-3">
+        <h4>Followers</h4>
+        {% if followers %}
+        {% for user in followers %}
+            <p><img class="mini-profile pe-2" src="{{ url_for('static', filename = 'images/image1.jpg') }}"><a href="{{ url_for('user', uid=user.uid) }}">{{ user.username }}</a></p>           
+        {% endfor %}
+        {% else %} 
+            <p>No followers.</p>
+        {% endif %}
+    </article>
+</section>
 {% endblock %}

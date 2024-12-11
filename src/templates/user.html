@@ -1,23 +1,44 @@
-{% extends "template.html" %}
+{% extends "template_focus.html" %}
 
 {% block main %}
 
-{% if user.uid != current_user.uid %}
-<form action="{{ url_for('user', uid=user.uid) }}" method="post"> 
-    <fieldset>
-        {{ form.csrf_token}}
-        {% if is_followed %}
-            {{ form.unfollow_submit }}
-        {% else %}
-            {{ form.follow_submit }}
+<div class="d-flex flex-column align-items-center">
+    <section class="text-center">
+        <img class="profile_img mt-3" src="{{ url_for('static', filename='images/image1.jpg') }}" alt="image"> 
+        <h3 class="mt-2">{{ user.username }}</h3>
+        {% if user.uid != current_user.uid %}
+            <form action="{{ url_for('user', uid=user.uid) }}" method="post" class=" mt-3"> 
+                <fieldset>
+                    {{ form.csrf_token}}
+                    {% if is_followed %}
+                        {{ form.unfollow_submit(class="btn btn-primary") }}
+                    {% else %}
+                        {{ form.follow_submit(class="btn btn-primary") }}
+                    {% endif %}
+                </fieldset>
+            </form>
         {% endif %}
-    </fieldset>
-</form>
-{% endif %}
+    </section>
+    
+    
+    <section class="mt-4">
+        {% if posts %}
+            <h3>Posts</h3>
+                {% for post in posts %}
+                    <article class="container-custom">
+                        <p>{{ post.content }}</p>
+                        <a class="btn btn-secondary" href="{{ url_for('post', uid=post.uid) }}">Show more</a>
+                    </article>
+                    <hr>
+                {% endfor %}
+        {% else %}
+            <p>There are no posts yet.</p>
+        {% endif %}
+    
+    </section>
+    
+</div>
 
-<p>{{ user.username }}</p>
 
-{% for post in posts %}
-    <p>{{ post.content }}</p>
-{% endfor %}
+
 {% endblock %}

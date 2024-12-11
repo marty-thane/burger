@@ -76,14 +76,9 @@ def home():
 @app.route("/people", methods=["GET", "POST"])
 @login_required
 def people():
-    followed_users = current_user.follows.order_by("username").all()
-    recommended_users = []
-    for user in followed_users: #* maybe use cypher as well (may be faster)
-        recommended_users.extend(user.follows.all())
-    if recommended_users:
-        recommended_users = random.shuffle(recommended_users)[:MAX_RECOMMENDED_LENGTH]
+    follows = current_user.follows.order_by("username").all()
+    followers = current_user.followers.order_by("username").all()
         
-
     form = PeopleForm()
     if form.validate_on_submit():
         username = form.username.data
@@ -94,7 +89,7 @@ def people():
             flash("This user does not exist.")
             return redirect(url_for("people"))
 
-    return render_template("people.html", form=form, followed_users=followed_users, recommended_users=recommended_users, heading=get_heading())
+    return render_template("people.html", form=form, follows=follows, followers=followers, heading=get_heading())
 
 @app.route("/post/<string:uid>", methods=["GET", "POST"])
 @login_required

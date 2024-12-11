@@ -10,7 +10,7 @@
 <body>
     <div class="d-flex vh-100 text-white"> 
         <nav class="bg-dark pt-5 ">    
-            <ul class="navbar flex-column align-items-center"  style="list-style-type: none;">                
+            <ul class="navbar flex-column align-items-center" style="list-style-type: none;">                
                 <li class="nav-item mb-4">
                     <a href="{{ url_for('home') }}" class="nav-link">🏠 Home</a>
                 </li>
@@ -26,10 +26,6 @@
             </ul>
         </nav>
         <div class="flex-grow-1 custom_color" style="overflow-y: auto;">
-            <header class="my-4 ps-5">
-                <h2>{{ heading | capitalize }}</h2>
-            </header>
-
             <main>
                 {% block main %}{% endblock %}
             </main>
