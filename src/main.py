@@ -3,12 +3,12 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from neomodel import config
 from forms import LoginForm, PostForm, CommentForm, FollowForm, PeopleForm
 from models import User, Post, Comment
-from helpers import get_heading
+from helpers import get_heading, get_pictures
 import random
 import os
 
 MAX_FEED_LENGTH = 30
-MAX_RECOMMENDED_LENGTH = 5
+PICTURES = get_pictures("/usr/src/burger/static/pictures/")
 
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
@@ -35,7 +35,7 @@ def login():
         if create_account:
             user = User.nodes.get_or_none(username=username) # Check if user exists
             if not user:
-                user = User(username=username, password=password).save() # Create new account
+                user = User(username=username, password=password, picture=random.choice(PICTURES)).save() # Create new account
                 login_user(user)
                 return redirect(url_for("home"))
             else:
