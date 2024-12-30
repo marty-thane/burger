@@ -5,6 +5,7 @@
     <!-- Post Section -->
     <article class="container mt-4">
         <header>
+            <h2>Post</h2>
             <h4 class="card-title">{{ author.username }}</h4>
         </header>
         <section class="card-body" style="background-color: transparent; color: inherit;">
@@ -19,6 +20,7 @@
         <button id="showFormButton" class="btn btn-secondary btn-sm p-1 w-40">Leave a Comment</button>
     </div>
 
+
     <!-- Form Section (Initially hidden) -->
     <div id="commentForm" class="container mt-4" style="display: none;">
         <div class="card shadow-lg border-0 text-center">
@@ -30,7 +32,7 @@
                     <fieldset>
                         <div class="mb-3">
                             {{ form.csrf_token }}
-                            {{ form.content(class="form-control text-center", placeholder="Write a comment...", style="min-height: 120px; background-color: #6c757d; color: white;") }}
+                            {{ form.content(class="form-control text-center", placeholder="Write a comment...", style="min-height: 80px; background-color: #6c757d; color: white;") }}
                         </div>
                         <div class="d-grid gap-2">
                             {{ form.submit(class="btn btn-dark btn-lg") }}
@@ -43,6 +45,7 @@
 
     <!-- Comments Section as Articles -->
     <div class="container mt-4">
+        <h3>Comments</h3>
         {% for user, comment in users_comments %}
             <article class="mb-3">
                 <header>

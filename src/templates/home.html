@@ -4,7 +4,7 @@
 <div class="container my-4 d-flex flex-column align-items-center">
     <!-- Form Section -->
     <div class="row justify-content-center w-100">
-        <div class="col-md-8">
+        <div class="col-md-7">
             <div class="card shadow-lg border-0 text-center">
                 <div class="card-header bg-dark text-white">
                     <h4>Create a Post</h4>
@@ -14,7 +14,7 @@
                         <fieldset>
                             {{ form.csrf_token }}
                             <div class="mb-3">
-                                {{ form.content(class="form-control text-center", placeholder="Write your post...", style="min-height: 120px; background-color: #6c757d; color: white;") }}
+                                {{ form.content(class="form-control text-center", placeholder="Write your post...", style="min-height: 80px; background-color: #6c757d; color: white;") }}
                             </div>
                             <div class="d-grid gap-2">
                                 {{ form.submit(class="btn btn-dark btn-lg") }}
@@ -28,7 +28,7 @@
 
     <!-- Posts Section -->
     <div class="row mt-5 justify-content-center w-100">
-        <div class="col-md-8">
+        <div class="col-md-7">
             {% if users_posts %}
                 {% for user, post in users_posts %}
                     <div class="card mb-4 shadow-lg border-0 text-center">
