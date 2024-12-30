@@ -1,7 +1,7 @@
 {% extends "template_focus.html" %}
 
 {% block main %}
-<div class="d-flex flex-column align-items-center mx-5 mt-2">
+<div class="d-flex flex-column align-items-start mx-5 mt-2">
     <!-- Post Section -->
     <article class="container mt-4">
         <header>
@@ -13,10 +13,11 @@
             </div>
         </section>
     </article>
-    <hr>
-
-    <!-- Form Section -->
-    <button id="showFormButton" class="btn btn-secondary">Leave a Comment</button>
+    
+    <!-- Button Section, aligned left with text above and below -->
+    <div class="container mt-3">
+        <button id="showFormButton" class="btn btn-secondary btn-sm p-1 w-40">Leave a Comment</button>
+    </div>
 
     <!-- Form Section (Initially hidden) -->
     <div id="commentForm" class="container mt-4" style="display: none;">
@@ -39,7 +40,6 @@
             </div>
         </div>
     </div>
-    
 
     <!-- Comments Section as Articles -->
     <div class="container mt-4">
