@@ -1,55 +1,71 @@
 {% extends "template_focus.html" %}
 
 {% block main %}
+<div class="d-flex flex-column align-items-center mx-5 mt-2">
+    <!-- Post Section -->
+    <article class="container mt-4">
+        <header>
+            <h4 class="card-title">{{ author.username }}</h4>
+        </header>
+        <section class="card-body" style="background-color: transparent; color: inherit;">
+            <div class="card-body">
+                <p class="card-text">{{ post.content }}</p>
+            </div>
+        </section>
+    </article>
+    <hr>
 
-<!-- Post Section -->
-<article class="container mt-4">
-    <header>
-        <h4 class="card-title">{{ author.username }}</h4>
-    </header>
-    <section class="card-body" style="background-color: transparent; color: inherit;">
-        <div class="card-body">
-            <p class="card-text">{{ post.content }}</p>
-        </div>
-    </section>
-</article>
-<hr>
+    <!-- Form Section -->
+    <button id="showFormButton" class="btn btn-secondary">Leave a Comment</button>
 
-<!-- Form Section -->
-<div class="container mt-4">
-    <div class="card shadow-sm">
-        <div class="card-header">
-            <h5>Leave a Comment</h5>
+    <!-- Form Section (Initially hidden) -->
+    <div id="commentForm" class="container mt-4" style="display: none;">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5>Leave a Comment</h5>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('post', uid=post.uid) }}" method="post">
+                    <fieldset>
+                        <div class="mb-3">
+                            {{ form.csrf_token }}
+                            {{ form.content(class="form-control", placeholder="Write a comment...") }}
+                        </div>
+                        <div class="d-grid gap-2">
+                            {{ form.submit(class="btn btn-primary btn-block") }}
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
         </div>
-        <div class="card-body">
-            <form action="{{ url_for('post', uid=post.uid) }}" method="post">
-                <fieldset>
-                    <div class="mb-3">
-                        {{ form.csrf_token }}
-                        {{ form.content(class="form-control", placeholder="Write a comment...") }}
-                    </div>
-                    <div class="d-grid gap-2">
-                        {{ form.submit(class="btn btn-primary btn-block") }}
-                    </div>
-                </fieldset>
-            </form>
-        </div>
+    </div>
+    
+
+    <!-- Comments Section as Articles -->
+    <div class="container mt-4">
+        {% for user, comment in users_comments %}
+            <article class="mb-3">
+                <header>
+                    <h5 class="card-title">{{ user.username }}</h5>
+                </header>
+                <section class="card-body" style="background-color: transparent; color: inherit;">
+                    <p class="card-text">{{ comment.content }}</p>
+                </section>
+            </article>
+            <hr>
+        {% endfor %}
     </div>
 </div>
 
-<!-- Comments Section as Articles -->
-<div class="container mt-4">
-    {% for user, comment in users_comments %}
-        <article class="mb-3">
-            <header>
-                <h5 class="card-title">{{ user.username }}</h5>
-            </header>
-            <section class="card-body" style="background-color: transparent; color: inherit;">
-                <p class="card-text">{{ comment.content }}</p>
-            </section>
-        </article>
-        <hr>
-    {% endfor %}
-</div>
+<script>
+    document.getElementById("showFormButton").addEventListener("click", function() {
+        var form = document.getElementById("commentForm");
+        if (form.style.display === "none") {
+            form.style.display = "block";
+        } else {
+            form.style.display = "none";
+        }
+    });
+</script>
 
 {% endblock %}
