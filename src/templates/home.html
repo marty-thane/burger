@@ -1,23 +1,23 @@
 {% extends "template.html" %}
 
 {% block main %}
-<div class="container my-4">
+<div class="container my-4 d-flex flex-column align-items-center">
     <!-- Form Section -->
-    <div class="row justify-content-center">
+    <div class="row justify-content-center w-100">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
+            <div class="card shadow-lg border-0 text-center">
+                <div class="card-header bg-dark text-white">
                     <h4>Create a Post</h4>
                 </div>
-                <div class="card-body">
-                    <form action="{{ url_for('home') }}" method="post">
+                <div class="card-body bg-secondary">
+                    <form action="{{ url_for('home') }}" method="post"> 
                         <fieldset>
                             {{ form.csrf_token }}
                             <div class="mb-3">
-                                {{ form.content(class="form-control", placeholder="Write your post...") }}
+                                {{ form.content(class="form-control text-center", placeholder="Write your post...", style="min-height: 120px; background-color: #6c757d; color: white;") }}
                             </div>
-                            <div>
-                                {{ form.submit(class="btn btn-primary w-100") }}
+                            <div class="d-grid gap-2">
+                                {{ form.submit(class="btn btn-dark btn-lg") }}
                             </div>
                         </fieldset>
                     </form>
@@ -27,11 +27,11 @@
     </div>
 
     <!-- Posts Section -->
-    <div class="row mt-5 justify-content-center">
+    <div class="row mt-5 justify-content-center w-100">
         <div class="col-md-8">
             {% if users_posts %}
                 {% for user, post in users_posts %}
-                    <div class="card mb-3">
+                    <div class="card mb-4 shadow-lg border-0 text-center">
                         <div class="card-header bg-secondary text-white">
                             <h5 class="mb-0">
                                 <a href="{{ url_for('user', uid=user.uid) }}" class="text-decoration-none text-white">
@@ -39,13 +39,11 @@
                                 </a>
                             </h5>
                         </div>
-                        <div class="card-body">
-                            <p class="card-text">{{ post.content }}</p>
+                        <div class="card-body bg-white">
+                            <p class="card-text text-muted" style="font-size: 1.1rem;">{{ post.content }}</p>
                         </div>
-                        <div class="card-footer">
-                            <a href="{{ url_for('post', uid=post.uid) }}" class="btn btn-outline-primary btn-sm">
-                                Show More
-                            </a>
+                        <div class="card-footer bg-light">
+                            <a href="{{ url_for('post', uid=post.uid) }}" class="btn btn-outline-primary btn-sm">Show More</a>
                         </div>
                     </div>
                 {% endfor %}
