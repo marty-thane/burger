@@ -2,11 +2,10 @@
 
 {% block main %}
 <div class="d-flex flex-column align-items-start mx-5 mt-2">
-    <!-- Post Section -->
     <article class="container mt-4">
         <header>
             <h2>Post</h2>
-            <h4 class="card-title">{{ author.username }}</h4>
+            <h4 class="card-title mb-1">{{ author.username }}</h4>
         </header>
         <section class="card-body" style="background-color: transparent; color: inherit;">
             <div class="card-body">
@@ -15,13 +14,12 @@
         </section>
     </article>
     
-    <!-- Button Section, aligned left with text above and below -->
+
     <div class="container mt-3">
         <button id="showFormButton" class="btn btn-secondary btn-sm p-1 w-40">Leave a Comment</button>
     </div>
 
 
-    <!-- Form Section (Initially hidden) -->
     <div id="commentForm" class="container mt-4" style="display: none;">
         <div class="card shadow-lg border-0 text-center">
             <div class="card-header bg-dark text-white">
@@ -43,13 +41,13 @@
         </div>
     </div>
 
-    <!-- Comments Section as Articles -->
+
     <div class="container mt-4">
         <h3>Comments</h3>
         {% for user, comment in users_comments %}
             <article class="mb-3">
                 <header>
-                    <h5 class="card-title">{{ user.username }}</h5>
+                    <h5 class="card-title mb-1">{{ user.username }}</h5>
                 </header>
                 <section class="card-body" style="background-color: transparent; color: inherit;">
                     <p class="card-text">{{ comment.content }}</p>
@@ -59,6 +57,7 @@
         {% endfor %}
     </div>
 </div>
+
 
 <script>
     document.getElementById("showFormButton").addEventListener("click", function() {
