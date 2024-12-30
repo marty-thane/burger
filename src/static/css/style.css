@@ -102,5 +102,5 @@ a:hover {
 
 .form-control::placeholder {
     color: white;
-    opacity: 1; /* Ensures the placeholder text isn't transparent */
+    opacity: 1; 
 }

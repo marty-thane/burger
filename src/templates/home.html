@@ -32,18 +32,18 @@
             {% if users_posts %}
                 {% for user, post in users_posts %}
                     <div class="card mb-4 shadow-lg border-0 text-center">
-                        <div class="card-header bg-secondary text-white">
+                        <div class="card-header bg-dark text-white">
                             <h5 class="mb-0">
                                 <a href="{{ url_for('user', uid=user.uid) }}" class="text-decoration-none text-white">
                                     {{ user.username }}
                                 </a>
                             </h5>
                         </div>
-                        <div class="card-body bg-white">
-                            <p class="card-text text-muted" style="font-size: 1.1rem;">{{ post.content }}</p>
+                        <div class="card-body" style="background-color: #6c757d;">
+                            <p class="card-text" style="font-size: 1.1rem; color: white;">{{ post.content }}</p>
                         </div>
-                        <div class="card-footer bg-light">
-                            <a href="{{ url_for('post', uid=post.uid) }}" class="btn btn-outline-primary btn-sm">Show More</a>
+                        <div class="card-footer bg-dark">
+                            <a class="btn btn-secondary" href="{{ url_for('post', uid=post.uid) }}">Show more</a>
                         </div>
                     </div>
                 {% endfor %}
