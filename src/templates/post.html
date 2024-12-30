@@ -21,19 +21,19 @@
 
     <!-- Form Section (Initially hidden) -->
     <div id="commentForm" class="container mt-4" style="display: none;">
-        <div class="card shadow-sm">
-            <div class="card-header">
+        <div class="card shadow-lg border-0 text-center">
+            <div class="card-header bg-dark text-white">
                 <h5>Leave a Comment</h5>
             </div>
-            <div class="card-body">
+            <div class="card-body bg-secondary">
                 <form action="{{ url_for('post', uid=post.uid) }}" method="post">
                     <fieldset>
                         <div class="mb-3">
                             {{ form.csrf_token }}
-                            {{ form.content(class="form-control", placeholder="Write a comment...") }}
+                            {{ form.content(class="form-control text-center", placeholder="Write a comment...", style="min-height: 120px; background-color: #6c757d; color: white;") }}
                         </div>
                         <div class="d-grid gap-2">
-                            {{ form.submit(class="btn btn-primary btn-block") }}
+                            {{ form.submit(class="btn btn-dark btn-lg") }}
                         </div>
                     </fieldset>
                 </form>
