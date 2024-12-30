@@ -1,28 +1,60 @@
 {% extends "template.html" %}
 
 {% block main %}
-<form action="{{ url_for('home') }}" method="post"> 
-    <fieldset>
-        {{ form.csrf_token}}
-        {{ form.content }}
-        {{ form.submit }}
-    </fieldset>
-</form>
+<div class="container my-4">
+    <!-- Form Section -->
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>Create a Post</h4>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('home') }}" method="post">
+                        <fieldset>
+                            {{ form.csrf_token }}
+                            <div class="mb-3">
+                                {{ form.content(class="form-control", placeholder="Write your post...") }}
+                            </div>
+                            <div>
+                                {{ form.submit(class="btn btn-primary w-100") }}
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-
-{% if users_posts %}
-    {% for user, post in users_posts %}
-        <p><a href="{{ url_for('user', uid=user.uid) }}">{{ user.username }}</a></p>
-        <p>{{ post.content }}</p>        
-        <p><a href="{{ url_for('post', uid=post.uid) }}">Show more</a></p>
-    {% endfor %}
-{% else %}
-    <p>No posts to show yet.</p>
-    
-{% endif %}
-    
-    
-
-
-
+    <!-- Posts Section -->
+    <div class="row mt-5 justify-content-center">
+        <div class="col-md-8">
+            {% if users_posts %}
+                {% for user, post in users_posts %}
+                    <div class="card mb-3">
+                        <div class="card-header bg-secondary text-white">
+                            <h5 class="mb-0">
+                                <a href="{{ url_for('user', uid=user.uid) }}" class="text-decoration-none text-white">
+                                    {{ user.username }}
+                                </a>
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{ post.content }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ url_for('post', uid=post.uid) }}" class="btn btn-outline-primary btn-sm">
+                                Show More
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-secondary text-center" role="alert">
+                    No posts to show yet.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}
