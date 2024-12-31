@@ -5,7 +5,10 @@
     <article class="container mt-4">
         <header>
             <h2>Post</h2>
-            <h4 class="card-title mb-1">{{ author.username }}</h4>
+            <h4 class="card-title mb-1">
+                <img class="mini-profile-2 pe-2" src="{{ url_for('static', filename='pictures/mini/' + author.picture) }}" alt="Profile Picture">
+                {{ author.username }}
+            </h4>
         </header>
         <section class="card-body" style="background-color: transparent; color: inherit;">
             <div class="card-body">
@@ -47,7 +50,10 @@
         {% for user, comment in users_comments %}
             <article class="mb-3">
                 <header>
-                    <h5 class="card-title mb-1">{{ user.username }}</h5>
+                    <h5 class="card-title mb-1">
+                        <img class="mini-profile-2 pe-2" src="{{ url_for('static', filename='pictures/mini/' + user.picture) }}" alt="Profile Picture">
+                        {{ user.username }}
+                    </h5>
                 </header>
                 <section class="card-body" style="background-color: transparent; color: inherit;">
                     <p class="card-text">{{ comment.content }}</p>
