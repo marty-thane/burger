@@ -3,7 +3,7 @@
 {% block main %}
 <div class="container my-4 d-flex flex-column align-items-center">
     <div class="row justify-content-center w-100">
-        <div class="col-md-7">
+        <div class="col-md-9">
             <div class="card shadow-lg border-0 text-center">
                 <div class="card-header bg-dark text-white">
                     <h4>Create a Post</h4>
@@ -27,15 +27,13 @@
 
 
     <div class="row mt-5 justify-content-center w-100">
-        <div class="col-md-7">
+        <div class="col-md-9">
             {% if users_posts %}
                 {% for user, post in users_posts %}
                     <div class="card mb-4 shadow-lg border-0 text-center">
-                        <div class="card-header bg-dark text-white">
+                        <div class="card-header bg-dark text-white pb-0">
                             <h5 class="mb-0">
-                                <a href="{{ url_for('user', uid=user.uid) }}" class="text-decoration-none text-white">
-                                    {{ user.username }}
-                                </a>
+                                <p><img class="mini-profile-2 pe-2" src="{{ url_for('static', filename = 'pictures/mini/'+user.picture) }}"><a href="{{ url_for('user', uid=user.uid) }}">{{ user.username }}</a></p>       
                             </h5>
                         </div>
                         <div class="card-body" style="background-color: #6c757d;">
