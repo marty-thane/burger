@@ -3,12 +3,12 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from neomodel import config
 from forms import LoginForm, PostForm, CommentForm, FollowForm, PeopleForm
 from models import User, Post, Comment
-from helpers import get_heading
+from helpers import get_heading, get_pictures
 import random
 import os
 
 MAX_FEED_LENGTH = 30
-MAX_RECOMMENDED_LENGTH = 5
+PICTURES = get_pictures("/usr/src/burger/static/pictures/")
 
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
@@ -35,7 +35,7 @@ def login():
         if create_account:
             user = User.nodes.get_or_none(username=username) # Check if user exists
             if not user:
-                user = User(username=username, password=password).save() # Create new account
+                user = User(username=username, password=password, picture=random.choice(PICTURES)).save() # Create new account
                 login_user(user)
                 return redirect(url_for("home"))
             else:
@@ -76,13 +76,9 @@ def home():
 @app.route("/people", methods=["GET", "POST"])
 @login_required
 def people():
-    followed_users = current_user.follows.order_by("username").all()
-    recommended_users = []
-    for user in followed_users: #* maybe use cypher as well (may be faster)
-        recommended_users.extend(user.follows.all())
-    if recommended_users:
-        recommended_users = random.shuffle(recommended_users)[:MAX_RECOMMENDED_LENGTH]
-
+    follows = current_user.follows.order_by("username").all()
+    followers = current_user.followers.order_by("username").all()
+        
     form = PeopleForm()
     if form.validate_on_submit():
         username = form.username.data
@@ -93,7 +89,7 @@ def people():
             flash("This user does not exist.")
             return redirect(url_for("people"))
 
-    return render_template("people.html", form=form, followed_users=followed_users, recommended_users=recommended_users, heading=get_heading())
+    return render_template("people.html", form=form, follows=follows, followers=followers, heading=get_heading())
 
 @app.route("/post/<string:uid>", methods=["GET", "POST"])
 @login_required

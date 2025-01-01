@@ -1,0 +1,109 @@
+
+nav {
+    flex: 0 1 300px;
+    max-width: 300px;
+    font-size: large;
+}
+
+.custom_color {
+    background-color: #3c3f45; 
+}
+
+a {
+    color: #ffffff;
+    text-decoration: none;
+    
+}
+a:hover {
+    text-decoration: underline;
+}
+
+.layout {
+    flex: 0 1 400px;
+    max-width: 400px;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #999999;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #6f6e6e;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #515151;
+}
+
+.users-container {
+    flex: 0 1 250px;
+    min-width: 100px;
+    max-width: 250px;
+    
+}
+
+.profile_img {
+    flex: 0 1 230px;
+    max-width: 230px;
+    border: 5px solid #070707;
+}
+
+.container-custom {
+    flex: 0 1;
+    width: 600px;
+}
+
+.mini-profile {
+    height: 3em;
+}
+
+.mini-profile-2 {
+    height: 2em;
+}
+@media (max-width: 1200px) {
+    .layout {
+        flex: 0 1 325px;
+        max-width: 325px;
+    }
+    nav {
+        flex: 0 1 250px;
+        max-width: 250px;
+    }
+    .container-custom {
+        width: 100%;
+        min-width: 400px;
+    }
+}
+
+@media (max-width: 960px) {
+    .layout {
+        flex: 0 1 250px;
+        max-width: 250px;
+    }
+    nav {
+        flex: 0 1 200px;
+        max-width: 200px;
+    }
+    .container-custom {
+        min-width: 200px;
+    }
+}
+
+@media (max-width: 540px) {
+    .layout {
+        display: none;
+    }
+    nav {
+        flex: 0 0 100px;
+        max-width: 100px;
+    }
+}
+
+.form-control::placeholder {
+    color: white;
+    opacity: 1; 
+}

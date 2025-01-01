@@ -1,5 +1,83 @@
 {% extends "template_focus.html" %}
 
 {% block main %}
+<div class="d-flex flex-column align-items-start mx-5 mt-2">
+    <article class="container mt-4">
+        <header>
+            <h2>Post</h2>
+            <h4 class="card-title mb-1">
+                <img class="mini-profile-2 pe-2" src="{{ url_for('static', filename='pictures/mini/' + author.picture) }}" alt="Profile Picture">
+                {{ author.username }}
+            </h4>
+        </header>
+        <section class="card-body" style="background-color: transparent; color: inherit;">
+            <div class="card-body">
+                <p class="card-text">{{ post.content }}</p>
+            </div>
+        </section>
+    </article>
+    
+
+    <div class="container mt-3">
+        <button id="showFormButton" class="btn btn-secondary btn-sm p-1 w-40">Leave a Comment</button>
+    </div>
+
+
+    <div id="commentForm" class="container mt-4" style="display: none;">
+        <div class="card shadow-lg border-0 text-center">
+            <div class="card-header bg-dark text-white">
+                <h5>Leave a Comment</h5>
+            </div>
+            <div class="card-body bg-secondary">
+                <form action="{{ url_for('post', uid=post.uid) }}" method="post">
+                    <fieldset>
+                        <div class="mb-3">
+                            {{ form.csrf_token }}
+                            {{ form.content(class="form-control text-center", placeholder="Write a comment...", style="min-height: 80px; background-color: #6c757d; color: white;") }}
+                        </div>
+                        <div class="d-grid gap-2">
+                            {{ form.submit(class="btn btn-dark btn-lg") }}
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container mt-4">
+        <h3>Comments</h3>
+        {% for user, comment in users_comments %}
+            <article class="mb-3">
+                <header>
+                    <h5 class="card-title mb-1">
+                        <img class="mini-profile-2 pe-2" src="{{ url_for('static', filename='pictures/mini/' + user.picture) }}" alt="Profile Picture">
+                        {{ user.username }}
+                    </h5>
+                </header>
+                <section class="card-body" style="background-color: transparent; color: inherit;">
+                    <p class="card-text">{{ comment.content }}</p>
+                </section>
+            </article>
+            <hr>
+        {% endfor %}
+    </div>
+</div>
+
+
+<script>
+document.getElementById("showFormButton").addEventListener("click", function() {
+    var form = document.getElementById("commentForm");
+    var button = document.getElementById("showFormButton");
+    
+    if (form.style.display === "none") {
+        form.style.display = "block";
+        button.style.display = "none";
+    } else {
+        form.style.display = "none";
+        button.style.display = "block";
+    }
+});
+</script>
 
 {% endblock %}

@@ -6,6 +6,7 @@ class User(StructuredNode, UserMixin):
     uid = UniqueIdProperty()
     username = StringProperty(unique_index=True, required=True, max_length=20)
     password = StringProperty(required=True)
+    picture = StringProperty(required=True)
     posts = RelationshipTo("Post", "POSTED", model=StructuredRel)
     comments = RelationshipTo("Comment", "COMMENTED", model=StructuredRel)
     follows = RelationshipTo("User", "FOLLOWED", model=StructuredRel)
