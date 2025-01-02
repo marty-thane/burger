@@ -6,8 +6,7 @@
         <header>
             <h2>Post</h2>
             <h4 class="card-title mb-1">
-                <img class="mini-profile-2 pe-2" src="{{ url_for('static', filename='pictures/mini/' + author.picture) }}" alt="Profile Picture">
-                {{ author.username }}
+				<p><img class="mini-profile-2 pe-2" src="{{ url_for('static', filename = 'pictures/mini/'+author.picture) }}"><a href="{{ url_for('user', uid=author.uid) }}">{{ author.username }}</a></p>       
             </h4>
         </header>
         <section class="card-body" style="background-color: transparent; color: inherit;">
@@ -51,8 +50,7 @@
             <article class="mb-3">
                 <header>
                     <h5 class="card-title mb-1">
-                        <img class="mini-profile-2 pe-2" src="{{ url_for('static', filename='pictures/mini/' + user.picture) }}" alt="Profile Picture">
-                        {{ user.username }}
+						<p><img class="mini-profile-2 pe-2" src="{{ url_for('static', filename = 'pictures/mini/'+user.picture) }}"><a href="{{ url_for('user', uid=user.uid) }}">{{ user.username }}</a></p>       
                     </h5>
                 </header>
                 <section class="card-body" style="background-color: transparent; color: inherit;">
